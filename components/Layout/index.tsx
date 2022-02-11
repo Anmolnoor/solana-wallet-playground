@@ -1,11 +1,11 @@
 import { Badge, Dropdown, Menu, Divider } from "antd";
 import React, { BaseSyntheticEvent, ReactElement } from "react";
 import {
-  DownOutlined,
-  UserOutlined,
-  ArrowLeftOutlined,
-  LogoutOutlined,
-  CreditCardOutlined,
+	DownOutlined,
+	UserOutlined,
+	ArrowLeftOutlined,
+	LogoutOutlined,
+	CreditCardOutlined
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "./index.module.css";
@@ -14,120 +14,118 @@ import { useRouter } from "next/router";
 import { Cluster } from "@solana/web3.js";
 
 type DomEvent = {
-  domEvent: BaseSyntheticEvent;
-  key: string;
-  keyPath: Array<string>;
+	domEvent: BaseSyntheticEvent;
+	key: string;
+	keyPath: Array<string>;
 };
 
 const Layout = ({ children }: { children: JSX.Element }): ReactElement => {
-  const { network, setNetwork, account, setAccount, setBalance, setMnemonic } =
-    useGlobalState();
+	const { network, setNetwork, account, setAccount, setBalance, setMnemonic } =
+		useGlobalState();
 
-  const router = useRouter();
+	const router = useRouter();
 
-  const selectNetwork = (e: DomEvent) => {
-    const networks: Array<Cluster> = ["mainnet-beta", "devnet", "testnet"];
-    const selectedNetwork = networks[parseInt(e.key) - 1];
-    setNetwork(selectedNetwork);
-  };
+	const selectNetwork = (e: DomEvent) => {
+		const networks: Array<Cluster> = ["mainnet-beta", "devnet", "testnet"];
+		const selectedNetwork = networks[parseInt(e.key) - 1];
+		setNetwork(selectedNetwork);
+	};
 
-  const menu = (
-    <Menu>
-      <Menu.Item onClick={selectNetwork} key="1">
-        Mainnet {network === "mainnet-beta" && <Badge status="processing" />}
-      </Menu.Item>
-      <Menu.Item onClick={selectNetwork} key="2">
-        Devnet {network === "devnet" && <Badge status="processing" />}
-      </Menu.Item>
-      <Menu.Item onClick={selectNetwork} key="3">
-        Testnet {network === "testnet" && <Badge status="processing" />}
-      </Menu.Item>
-    </Menu>
-  );
+	const menu = (
+		<Menu>
+			<Menu.Item onClick={selectNetwork} key='1'>
+				Mainnet {network === "mainnet-beta" && <Badge status='processing' />}
+			</Menu.Item>
+			<Menu.Item onClick={selectNetwork} key='2'>
+				Devnet {network === "devnet" && <Badge status='processing' />}
+			</Menu.Item>
+			<Menu.Item onClick={selectNetwork} key='3'>
+				Testnet {network === "testnet" && <Badge status='processing' />}
+			</Menu.Item>
+		</Menu>
+	);
 
-  const handleLogout = () => {
-    setAccount(null);
-    setNetwork("devnet");
-    setBalance(0);
-    setMnemonic("");
-    router.push("/");
-  };
+	const handleLogout = () => {
+		setAccount(null);
+		setNetwork("devnet");
+		setBalance(0);
+		setMnemonic("");
+		router.push("/");
+	};
 
-  const profile = (
-    <Menu>
-      <Menu.Item key="/wallet" icon={<CreditCardOutlined />}>
-        <Link href="/wallet" passHref>
-          Wallet
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
+	const profile = (
+		<Menu>
+			<Menu.Item key='/wallet' icon={<CreditCardOutlined />}>
+				<Link href='/wallet' passHref>
+					Wallet
+				</Link>
+			</Menu.Item>
+			<Menu.Item key='logout' icon={<LogoutOutlined />} onClick={handleLogout}>
+				Logout
+			</Menu.Item>
+		</Menu>
+	);
 
-  return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <header className={styles.header}>
-          <Link href={`/`} passHref>
-            <div className={`${styles.top} ${styles.logo}`}>MyWallet</div>
-          </Link>
+	return (
+		<div className={styles.container}>
+			<main className={styles.main}>
+				<header className={styles.header}>
+					<Link href={`/`} passHref>
+						<div className={`${styles.top} ${styles.logo}`}>MyWallet</div>
+					</Link>
 
-          <Menu
-            mode="horizontal"
-            className={styles.nav}
-            selectedKeys={[router.pathname]}
-          >
-            <Dropdown className={styles.top} overlay={menu} disabled={!account}>
-              <a
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                Network <DownOutlined />
-              </a>
-            </Dropdown>
+					<Menu
+						mode='horizontal'
+						className={styles.nav}
+						selectedKeys={[router.pathname]}>
+						<Dropdown className={styles.top} overlay={menu} disabled={!account}>
+							<a
+								className='ant-dropdown-link'
+								onClick={(e) => e.preventDefault()}>
+								Network <DownOutlined />
+							</a>
+						</Dropdown>
 
-            {account && (
-              <Dropdown
-                className={styles.top}
-                overlay={profile}
-                disabled={!account}
-              >
-                <a
-                  className="ant-dropdown-link"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <UserOutlined />
-                </a>
-              </Dropdown>
-            )}
-          </Menu>
-        </header>
+						{account && (
+							<Dropdown
+								className={styles.top}
+								overlay={profile}
+								disabled={!account}>
+								<a
+									className='ant-dropdown-link'
+									onClick={(e) => e.preventDefault()}>
+									<UserOutlined />
+								</a>
+							</Dropdown>
+						)}
+					</Menu>
+				</header>
 
-        {children}
+				{children}
 
-        {router.pathname !== "/" && (
-          <Link href="/" passHref>
-            <a className={styles.back}>
-              <ArrowLeftOutlined /> Back Home
-            </a>
-          </Link>
-        )}
+				{router.pathname !== "/" && (
+					<Link href='/' passHref>
+						<a className={styles.back}>
+							<ArrowLeftOutlined /> Back Home
+						</a>
+					</Link>
+				)}
 
-        <Divider style={{ marginTop: "3rem" }} />
+				<Divider style={{ marginTop: "3rem" }} />
 
-        <footer className={styles.footerHome}>
-          <p>
-            MyWallet tutorial created by{" "}
-            <a className={styles.footerLink} href="https://learn.figment.io/">
-              Figment Learn
-            </a>
-          </p>
-        </footer>
-      </main>
-    </div>
-  );
+				<footer className={styles.footerHome}>
+					<p>
+						{/* MyWallet tutorial created by{" "} */}
+						<a
+							className={styles.footerLink}
+							href='https://github.com/anmolnoor/'>
+							Anmol Noor
+						</a>
+					</p>
+				</footer>
+			</main>
+		</div>
+	);
 };
 
 export default Layout;
